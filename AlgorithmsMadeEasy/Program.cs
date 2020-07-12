@@ -16,10 +16,17 @@ namespace AlgorithmsMadeEasy
             Console.WriteLine($"LongestPrefix = {longestPrefix}");
             #endregion
 
+            #region LongestSubarray
 
-            //Console.WriteLine("Hello World!");
+            LongestSubarray classFile2 = new LongestSubarray();
+            int[] sampleNumbers = new int[3] { 1, 2, 3 };
+            var longestSubarray = classFile2.LongSubarray(sampleNumbers, 1);
+
+            Console.WriteLine($"LongestSubarray = {longestSubarray}");
+            #endregion
+            
         }
 
-        
+
     }
 }

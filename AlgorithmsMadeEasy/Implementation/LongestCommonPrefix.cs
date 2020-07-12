@@ -29,14 +29,22 @@ namespace AlgorithmsMadeEasy.Implementation
                     int matchingLetters = 0;
 
                     //add the character to an array.
-                    selectedLetter[0] = longWords[0].Substring(i, 1);
+                    if (longWords[0].Length >= 1)
+                    {
+                        selectedLetter[0] = longWords[0].Substring(i, 1);
+                    }
+                    
 
                     //This will pick the words after the first word and extract their sepecified character.
                     while (wordsPicked < numberOfWords)
                     {
                         //add the character to an array.
-                        selectedLetter[wordsPicked] = longWords[wordsPicked].Substring(i, 1);
-                        wordsPicked++;
+                        if (longWords[wordsPicked].Length >= 1)
+                        {
+                            selectedLetter[wordsPicked] = longWords[wordsPicked].Substring(i, 1);
+                            wordsPicked++;
+                        }
+                        
                     }
 
                     //Check if each letter picked from each word matches.
@@ -55,7 +63,6 @@ namespace AlgorithmsMadeEasy.Implementation
                         if (matchingLetters == numberOfWords)
                         {
                             longestPrefix += selectedLetter[0];
-
                         }
                     }
 
