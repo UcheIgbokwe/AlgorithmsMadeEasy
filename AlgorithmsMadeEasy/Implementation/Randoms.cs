@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace AlgorithmsMadeEasy.Implementation
 {
     public class Randoms
@@ -77,11 +81,11 @@ namespace AlgorithmsMadeEasy.Implementation
                 new Record("imoh@yahoo.com", "ImohO")
             };
 
-            var query = people.Join(record, 
-                x => x.Email,
-                y => y.Mail,
-                (people,record) => new { people.Name, record.SkyeId }
-                );
+            // var query = people.Join(record, 
+            //     x => x.Email,
+            //     y => y.Mail,
+            //     (people,record) => new { people.Name, record.SkyeId }
+            //     );
             //query.ToList().ForEach(i => Console.WriteLine($"Name: {i.Name}, SkyeId: {i.SkyeId}")); 
 
             //get the cube of each number between 1-50

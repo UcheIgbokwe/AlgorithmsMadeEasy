@@ -341,3 +341,5 @@ healthchecksdb
 
 #ReadMeFile
 *.md
+
+.DS_Store

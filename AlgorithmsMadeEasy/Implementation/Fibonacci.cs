@@ -1,8 +1,10 @@
+using System;
+
 namespace AlgorithmsMadeEasy.Implementation
 {
     public class Fibonacci
     {
-        public void Fibonacci()
+        public void Fibonaccii()
         {
             int n = 8;
             int firstNumber = 0 ; int secondNumber = 1; int result = 0;

@@ -1,8 +1,11 @@
+using System;
+using System.Linq;
+
 namespace AlgorithmsMadeEasy.Implementation
 {
     public class FizzBuzz
     {
-        public void FizzBuzz()
+        public void FizzBuzzer()
         {
             int count = 5;
             var numbers = Enumerable.Range(1,count);
