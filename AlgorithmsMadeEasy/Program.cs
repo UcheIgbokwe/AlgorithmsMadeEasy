@@ -1,5 +1,10 @@
 ﻿using AlgorithmsMadeEasy.Implementation;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Websocket.Client;
 
 namespace AlgorithmsMadeEasy
 {
@@ -7,6 +12,7 @@ namespace AlgorithmsMadeEasy
     {
         static void Main(string[] args)
         {
+            
             //#region LongestPrefix
 
             //LongestCommonPrefix classFile = new LongestCommonPrefix();
@@ -25,13 +31,53 @@ namespace AlgorithmsMadeEasy
             //Console.WriteLine($"LongestSubarray = {longestSubarray}");
             //#endregion
 
-            #region FindingDuplicate
+            // #region FindingDuplicate
 
-            FindingDuplicate classFile3 = new FindingDuplicate();
-            int[] numberArray = new int[7] { 6, 2, 3, 1, 5, 7, 3 };
-            var foundDuplicate = classFile3.findDuplicate(numberArray);
+            // FindingDuplicate classFile3 = new FindingDuplicate();
+            // int[] numberArray = new int[7] { 6, 2, 3, 1, 5, 7, 3 };
+            // var foundDuplicate = classFile3.findDuplicate(numberArray);
 
-            Console.WriteLine($"Duplicate number is = {foundDuplicate}");
+            // //Console.WriteLine($"Duplicate number is = {foundDuplicate}");
+            // #endregion
+
+            // #region BillDivision
+
+            // BillDivision classFile4 = new BillDivision();
+            // List<int> billl = new List<int> { 3, 10, 2, 9};
+            // classFile4.BonAppetit(billl, 1, 7);
+
+            // // string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
+
+            // // int n = Convert.ToInt32(firstMultipleInput[0]);
+            // // int k = Convert.ToInt32(firstMultipleInput[1]);
+            // // List<int> bill = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(billTemp => Convert.ToInt32(billTemp)).ToList();
+            // // int b = Convert.ToInt32(Console.ReadLine().Trim());
+            // // classFile4.BonAppetit(bill, k, b);
+
+            // #endregion
+
+            // var exitEvent = new ManualResetEvent(false);
+            // var url = new Uri("ws://machinestream.herokuapp.com/ws");
+
+            // using (var client = new WebsocketClient(url))
+            // {
+            //     client.ReconnectTimeout = TimeSpan.FromSeconds(60);
+            //     client.ReconnectionHappened.Subscribe(info =>
+            //         Console.WriteLine($"Reconnection happened, type: {info.Type}"));
+
+            //     client.MessageReceived.Subscribe(msg => Console.WriteLine($"Message received: {msg}"));
+            //     client.Start();
+
+            //     Task.Run(() => client.Send("{ message }"));
+
+            //     exitEvent.WaitOne();
+            // }
+
+            #region Print Next number using Recurssion
+
+            Recursion classFile4 = new Recursion();
+            classFile4.PrintNext(1);
+
             #endregion
 
         }
