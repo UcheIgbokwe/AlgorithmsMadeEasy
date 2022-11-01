@@ -1,87 +1,148 @@
-﻿using AlgorithmsMadeEasy.Implementation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Websocket.Client;
 
 namespace AlgorithmsMadeEasy
 {
     class Program
     {
-        static void Main(string[] args)
+        public class Event
+            {
+                public string Name{ get; set; }
+                public string City{ get; set; }
+                public int Distance { get; set; }
+                public int? Price { get; set; }
+            }
+
+        public class Customer
         {
-            
-            //#region LongestPrefix
-
-            //LongestCommonPrefix classFile = new LongestCommonPrefix();
-            //string[] sampleWords = new string[3] { "fly", "flask", "fletcher" };
-            //var longestPrefix = classFile.LongestPrefix(sampleWords);
-
-            //Console.WriteLine($"LongestPrefix = {longestPrefix}");
-            //#endregion
-
-            //#region LongestSubarray
-
-            //LongestSubarray classFile2 = new LongestSubarray();
-            //int[] sampleNumbers = new int[3] { 1, 2, 3 };
-            //var longestSubarray = classFile2.LongSubarray(sampleNumbers, 1);
-
-            //Console.WriteLine($"LongestSubarray = {longestSubarray}");
-            //#endregion
-
-            // #region FindingDuplicate
-
-            // FindingDuplicate classFile3 = new FindingDuplicate();
-            // int[] numberArray = new int[7] { 6, 2, 3, 1, 5, 7, 3 };
-            // var foundDuplicate = classFile3.findDuplicate(numberArray);
-
-            // //Console.WriteLine($"Duplicate number is = {foundDuplicate}");
-            // #endregion
-
-            // #region BillDivision
-
-            // BillDivision classFile4 = new BillDivision();
-            // List<int> billl = new List<int> { 3, 10, 2, 9};
-            // classFile4.BonAppetit(billl, 1, 7);
-
-            // // string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
-
-            // // int n = Convert.ToInt32(firstMultipleInput[0]);
-            // // int k = Convert.ToInt32(firstMultipleInput[1]);
-            // // List<int> bill = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(billTemp => Convert.ToInt32(billTemp)).ToList();
-            // // int b = Convert.ToInt32(Console.ReadLine().Trim());
-            // // classFile4.BonAppetit(bill, k, b);
-
-            // #endregion
-
-            // var exitEvent = new ManualResetEvent(false);
-            // var url = new Uri("ws://machinestream.herokuapp.com/ws");
-
-            // using (var client = new WebsocketClient(url))
-            // {
-            //     client.ReconnectTimeout = TimeSpan.FromSeconds(60);
-            //     client.ReconnectionHappened.Subscribe(info =>
-            //         Console.WriteLine($"Reconnection happened, type: {info.Type}"));
-
-            //     client.MessageReceived.Subscribe(msg => Console.WriteLine($"Message received: {msg}"));
-            //     client.Start();
-
-            //     Task.Run(() => client.Send("{ message }"));
-
-            //     exitEvent.WaitOne();
-            // }
-
-            #region Print Next number using Recurssion
-
-            Recursion classFile4 = new Recursion();
-            classFile4.PrintNext(1);
-
-            #endregion
-
+            public string Name{ get; set; }
+            public string City{ get; set; }
         }
 
+        private static Dictionary<string, int> cachedDistances = new Dictionary<string, int>();
 
+        static void Main(string[] args)
+        {
+            var events = new List<Event>{
+            new Event{ Name = "Phantom of the Opera", City = "New York"},
+            new Event{ Name = "Metallica", City = "Los Angeles"},
+            new Event{ Name = "Metallica", City = "New York"},
+            new Event{ Name = "Metallica", City = "Boston"},
+            new Event{ Name = "LadyGaGa", City = "New York"},
+            new Event{ Name = "LadyGaGa", City = "Boston"},
+            new Event{ Name = "LadyGaGa", City = "Chicago"},
+            new Event{ Name = "LadyGaGa", City = "San Francisco"},
+            new Event{ Name = "LadyGaGa", City = "Washington"}
+            };
+
+            //1. find out all events that arein cities of customer
+            // then add to email.
+            var customer = new Customer{ Name = "Mr. Fake", City = "New York"};
+
+            // 1. TASK
+            //Get eligible events
+            var eligibleEvents = events.Where(x => x.City.Equals(customer.City));
+            foreach(var item in eligibleEvents)
+            {
+                AddToEmail(customer, item);
+            }
+            /*
+            * We want you to send an email to this customer with all events in their city
+            * Just call AddToEmail(customer, event) for each event you think they should get
+            */
+
+            // 2. SEND EMAIL FOR 5 CLOSEST EVENTS
+            var fiveClosest = events.Select(e => new Event { Name = e.Name, City = e.City, Distance = GetDistance(customer.City, e.City) })
+                                                            .OrderBy(e => e.Distance)
+                                                            .Take(5);
+
+            foreach (var item in fiveClosest)
+            {
+                AddToEmail(customer, item);
+            }
+
+            // 3. If the GetDistance method is an API call which could fail or is too expensive, OptimizedGetDistance method created below
+            var fiveClosestOptimized = events.Select(e => new Event { Name = e.Name, City = e.City, Distance = OptimizedGetDistance(customer.City, e.City) })
+                                                                .OrderBy(e => e.Distance)
+                                                                .Take(5);
+
+            foreach (var item in fiveClosestOptimized)
+            {
+                AddToEmail(customer, item);
+            }
+
+            // 4. If the GetDistance method can fail, we don't want the process to fail.
+
+                //SAME AS SOLUTION 3 ABOVE
+
+            // 5. Sort by other fields (e.g price)
+            var furtherSortedEvents = events.Select(e => new Event { Name = e.Name, City = e.City, Distance = OptimizedGetDistance(customer.City, e.City), Price = GetPrice(e)})
+                                                            .OrderBy(e => e.Distance)
+                                                            .ThenBy(e => e.Price)
+                                                            .Take(5);
+
+            foreach (var item in furtherSortedEvents)
+            {
+                AddToEmail(customer, item, item.Price);
+            }
+        }
+
+        static int OptimizedGetDistance(string fromCity, string toCity)
+        {
+            if (fromCity.Equals(toCity))
+                return 0;
+            var key = fromCity + "_" + toCity;
+
+            if (cachedDistances.TryGetValue(key, out var cachedDistance))
+            {
+                return cachedDistance;
+            }
+            try
+            {
+                var distance = GetDistance(fromCity, toCity);
+                cachedDistances.Add(key, distance);
+
+                return distance;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            //Return max value since the GetDistance method failed
+            return int.MaxValue;
+        }
+        // You do not need to know how these methods work
+        static void AddToEmail(Customer c, Event e, int? price = null)
+        {
+            var distance = GetDistance(c.City, e.City);
+            Console.Out.WriteLine($"{c.Name}: {e.Name} in {e.City}"
+                                + (distance > 0 ? $" ({distance} miles away)" : "")
+                                + (price.HasValue ? $" for ${price}" : ""));
+        }
+        static int GetPrice(Event e)
+        {
+            return (AlphebiticalDistance(e.City, "") + AlphebiticalDistance(e.Name, "")) / 10;
+        }
+        static int GetDistance(string fromCity, string toCity)
+        {
+            return AlphebiticalDistance(fromCity, toCity);
+        }
+        private static int AlphebiticalDistance(string s, string t)
+            {
+                var result = 0;
+                var i = 0;
+                for(i = 0; i < Math.Min(s.Length, t.Length); i++)
+                {
+                    // Console.Out.WriteLine($"loop 1 i={i} {s.Length} {t.Length}");
+                    result += Math.Abs(s[i] - t[i]);
+                }
+                for(; i < Math.Max(s.Length, t.Length); i++)
+                {
+                    // Console.Out.WriteLine($"loop 2 i={i} {s.Length} {t.Length}");
+                    result += s.Length > t.Length ? s[i] : t[i];
+                }
+                return result;
+            }
     }
 }

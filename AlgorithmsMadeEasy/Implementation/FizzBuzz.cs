@@ -35,10 +35,5 @@ namespace AlgorithmsMadeEasy.Implementation
                 Console.Write($"{item}\t");
             }
         }
-
-
-        
     }
-
-    
 }
