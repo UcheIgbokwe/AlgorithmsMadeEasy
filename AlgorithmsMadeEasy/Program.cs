@@ -7,12 +7,12 @@ namespace AlgorithmsMadeEasy
     class Program
     {
         public class Event
-            {
-                public string Name{ get; set; }
-                public string City{ get; set; }
-                public int Distance { get; set; }
-                public int? Price { get; set; }
-            }
+        {
+            public string Name{ get; set; }
+            public string City{ get; set; }
+            public int Distance { get; set; }
+            public int? Price { get; set; }
+        }
 
         public class Customer
         {
